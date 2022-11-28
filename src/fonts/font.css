@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'CoolCats Regular';
+  font-style: normal;
+  font-weight: 400;
+  src: local('CoolCats Regular'), url('./CoolCatsHandwritingRegular.woff2') format('woff2'),
+  local('CoolCats Regular'), url('./CoolCatsHandwritingRegular.woff') format('woff');
+  font-display: swap;
+}
