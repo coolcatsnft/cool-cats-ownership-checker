@@ -4,6 +4,12 @@ import { device } from "../utils/device";
 import CoolCatsHandwritingRegularWoff from '../fonts/CoolCatsHandwritingRegular.woff';
 import CoolCatsHandwritingRegularWoff2 from '../fonts/CoolCatsHandwritingRegular.woff2';
 
+export const styledBorderPartial = `
+  border: 4px solid var(--disabled);
+  border-radius: var(--site-radius);
+  margin-bottom: var(--site-spacing);
+`;
+
 export const styledInputPartial = `
   appearance: none;
   outline: none;
@@ -11,9 +17,7 @@ export const styledInputPartial = `
   background: transparent;
   display: block;
   width: 100%;
-  border: 4px solid var(--disabled);
-  border-radius: var(--site-radius);
-  margin-bottom: var(--site-spacing);
+  ${styledBorderPartial}
 
   &::placeholder {
     color: var(--disabled);
