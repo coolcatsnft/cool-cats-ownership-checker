@@ -140,7 +140,23 @@ function ContractForm() {
     if (e) {
       e.preventDefault();
     }
-    const [contractAddress, lastToken] = (new FormData(document.querySelector('form'))).values(); 
+    const form = document.querySelector('form');
+    if (!form) {
+      console.error('Form not found')
+      return;
+    }
+
+    let fd = new FormData(form);
+    if (!fd) {
+      console.error('Form data object found')
+      return;
+    }
+
+    if (fd.fd) {
+      fd = fd.fd;
+    }
+    
+    const [contractAddress, lastToken] = fd.values(); 
 
     setFormData({
       contractAddress,

@@ -59,6 +59,17 @@ function Results() {
   const resultsSlice = 1000;
   const [slice, setSlice] = useState(resultsSlice);
 
+  const countTokensInArray = (a, v, i) => {
+    if (!a[v]) {
+      a[v] = ''
+    }
+    
+    a[v] = a[v].split(',');
+    a[v].push(i);
+    a[v] = a[v].filter(k => k).join(',');
+    return a;
+  }
+
   const exportToCsv = (arr, title) => {
     const encodedUri = encodeURI(["data:text/csv;charset=utf-8,", arr.join(",\n")].join(''));
     const link = document.createElement("a");
@@ -74,22 +85,22 @@ function Results() {
   }
 
   const dedupe = (arr) => {
-    const d = [...new Set(arr.unshift('Address'))];
+    const tokenArr = arr.reduce(countTokensInArray, {});
+    const flattened = [['Address', 'Number of Tokens'].join(",")];
+    for (var k in tokenArr) {
+      flattened.push([k, tokenArr[k].split(',').length].join(","));
+    }
 
-    exportToCsv(d, 'deduplicated');
+    exportToCsv(
+      flattened.sort((a, b) => {
+        return b.split(',')[1] - a.split(',')[1];
+      }),
+      'deduplicated'
+    );
   }
 
   const withTokens = (arr) => {
-    const tokenArr = arr.reduce((a, v, i) => {
-      if (!a[v]) {
-        a[v] = ''
-      }
-      
-      a[v] = a[v].split(',');
-      a[v].push(i);
-      a[v] = a[v].filter(k => k).join(',');
-      return a;
-    }, {});
+    const tokenArr = arr.reduce(countTokensInArray, {});
 
     // Flatten to array
     const flattened = [['Address', 'Tokens'].join(",")];
