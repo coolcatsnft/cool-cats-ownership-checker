@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
 import useDebounce from '../hooks/useDebounce';
 import useWeb3 from '../hooks/useWeb3';
@@ -66,6 +66,7 @@ function ContractForm() {
   const [error, setError] = useState();
   const [lastTokenError, setLastTokenError] = useState();
   const [formData, setFormData] = useState();
+  const formRef = useRef();
 
   useEffect(() => {
     if (contract && formData && !loading) {
@@ -141,7 +142,7 @@ function ContractForm() {
       e.preventDefault();
     }
     const data = {};
-    (new FormData(e.target)).fd.forEach((value, key) => (data[key] = value));
+    (new FormData(formRef.current)).fd.forEach((value, key) => (data[key] = value));
 
     setFormData(data);
 
@@ -152,7 +153,7 @@ function ContractForm() {
     <>
       {error && <ContractFormError error={error} />}
       {lastTokenError && <ContractFormError error={lastTokenError} />}
-      <StyledForm onSubmit={onSubmit} disabled={(formData || false)}>
+      <StyledForm ref={formRef} onSubmit={onSubmit} disabled={(formData || false)}>
         <StyledInput onChange={onInputChange} disabled={(formData || false)} name="contractAddress" placeholder="Contract Address" />
         <StyledInput onChange={onLastTokenChange} disabled={(formData || false)} name="lastToken" type="number" min={0} placeholder="Last Token Id" />
         <StyledButton disabled={!contractAddress || (lastToken < 0) || error || lastTokenError || (formData || false)} type="submit">Search</StyledButton>
