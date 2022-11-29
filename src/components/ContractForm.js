@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import useDebounce from '../hooks/useDebounce';
 import useWeb3 from '../hooks/useWeb3';
 import useContract from '../hooks/useContract';
-import { styledButtonPartial, styledInputPartial } from './GlobalStyle';
+import { styledBorderPartial, styledButtonPartial, styledInputPartial } from './GlobalStyle';
 import { getTokensFromContract } from '../utils';
 import useResults, { useSetResults } from '../hooks/useResults';
 
@@ -30,16 +30,25 @@ const StyledError = styled.blockquote`
   width: 100%;
   background: red;
   color: white;
+  ${styledBorderPartial};
+  margin-bottom: var(--site-spacing);
+  padding: var(--site-spacing);
+  cursor: pointer;
 `;
 
 function ContractFormError({ error }) {
   const [closed, setClosed] = useState(false);
+
+  useEffect(() => {
+    setClosed(false);
+  }, [error])
+
   if (closed) {
     return null;
   }
 
   return (
-    <StyledError>
+    <StyledError onClick={() => setClosed(true)}>
       {error.message}
     </StyledError>
   )
@@ -53,7 +62,7 @@ function ContractForm() {
   const [event, setEvent] = useState();
   const [lastTokenEvent, setLastTokenEvent] = useState();
   const [contractAddress, setContractAddress] = useState('');
-  const [lastToken, setLastToken] = useState(0);
+  const [lastToken, setLastToken] = useState(-1);
   const [error, setError] = useState();
   const [lastTokenError, setLastTokenError] = useState();
   const [formData, setFormData] = useState();
@@ -111,7 +120,7 @@ function ContractForm() {
           setLastTokenError(e);
         }
       } else {
-        setLastToken(0);
+        setLastToken(-1);
         setLastTokenError(undefined);
       }
     },
@@ -146,7 +155,7 @@ function ContractForm() {
       <StyledForm onSubmit={onSubmit} disabled={(formData || false)}>
         <StyledInput onChange={onInputChange} disabled={(formData || false)} name="contractAddress" placeholder="Contract Address" />
         <StyledInput onChange={onLastTokenChange} disabled={(formData || false)} name="lastToken" type="number" min={0} placeholder="Last Token Id" />
-        <StyledButton disabled={!contractAddress || !lastToken || error || lastTokenError || (formData || false)} type="submit">Search</StyledButton>
+        <StyledButton disabled={!contractAddress || (lastToken < 0) || error || lastTokenError || (formData || false)} type="submit">Search</StyledButton>
       </StyledForm>
     </>
   );

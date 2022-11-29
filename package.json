@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple app to check ownership of a given collection",
   "main": "src/index.js",
+  "homepage": "/cool-cats-ownership-checker/",
   "dependencies": {
     "react": "18.0.0",
     "react-dom": "18.0.0",
