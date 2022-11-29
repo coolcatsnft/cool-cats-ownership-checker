@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.js": "/cool-cats-ownership-checker/static/js/main.2eb74f46.chunk.js",
-    "main.js.map": "/cool-cats-ownership-checker/static/js/main.2eb74f46.chunk.js.map",
+    "main.js": "/cool-cats-ownership-checker/static/js/main.d9cea0d1.chunk.js",
+    "main.js.map": "/cool-cats-ownership-checker/static/js/main.d9cea0d1.chunk.js.map",
     "runtime-main.js": "/cool-cats-ownership-checker/static/js/runtime-main.32ed5de4.js",
     "runtime-main.js.map": "/cool-cats-ownership-checker/static/js/runtime-main.32ed5de4.js.map",
-    "static/js/2.dcd7964c.chunk.js": "/cool-cats-ownership-checker/static/js/2.dcd7964c.chunk.js",
-    "static/js/2.dcd7964c.chunk.js.map": "/cool-cats-ownership-checker/static/js/2.dcd7964c.chunk.js.map",
+    "static/js/2.e4051122.chunk.js": "/cool-cats-ownership-checker/static/js/2.e4051122.chunk.js",
+    "static/js/2.e4051122.chunk.js.map": "/cool-cats-ownership-checker/static/js/2.e4051122.chunk.js.map",
     "index.html": "/cool-cats-ownership-checker/index.html",
-    "static/js/2.dcd7964c.chunk.js.LICENSE.txt": "/cool-cats-ownership-checker/static/js/2.dcd7964c.chunk.js.LICENSE.txt",
+    "static/js/2.e4051122.chunk.js.LICENSE.txt": "/cool-cats-ownership-checker/static/js/2.e4051122.chunk.js.LICENSE.txt",
     "static/media/CoolCatsHandwritingRegular.34c1b609.woff2": "/cool-cats-ownership-checker/static/media/CoolCatsHandwritingRegular.34c1b609.woff2",
     "static/media/CoolCatsHandwritingRegular.f47a6a5f.woff": "/cool-cats-ownership-checker/static/media/CoolCatsHandwritingRegular.f47a6a5f.woff"
   },
   "entrypoints": [
     "static/js/runtime-main.32ed5de4.js",
-    "static/js/2.dcd7964c.chunk.js",
-    "static/js/main.2eb74f46.chunk.js"
+    "static/js/2.e4051122.chunk.js",
+    "static/js/main.d9cea0d1.chunk.js"
   ]
 }
