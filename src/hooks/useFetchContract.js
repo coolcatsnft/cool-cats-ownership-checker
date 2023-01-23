@@ -31,7 +31,7 @@ export const getApi = (id) => {
 };
 
 export function useFetchContract(contractAddress) {
-  const { library } = useWeb3();
+  const { network, library } = useWeb3();
   const [abi, setAbi] = useLocalStorage(`${contractAddress}-abi`);
   const [contract, setContract] = useState();
   const [contractError, setContractError] = useState();
@@ -44,7 +44,7 @@ export function useFetchContract(contractAddress) {
 
       return fetch(
         `//${getApi(
-          library.currentProvider.networkVersion
+          network.id
         )}.etherscan.io/api?module=contract&action=getabi&address=${contractAddress}&format=raw`
       ).then((res) => {
         if (res.status !== 200) {
@@ -59,7 +59,7 @@ export function useFetchContract(contractAddress) {
         });
       });
     };
-
+    
     if (library && !abi && !contractError) {
       fetchAbi()
         .then((json) => {
@@ -71,6 +71,7 @@ export function useFetchContract(contractAddress) {
     }
   }, [
     contractAddress,
+    network,
     library,
     contract,
     contractError,

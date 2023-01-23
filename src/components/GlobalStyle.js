@@ -33,7 +33,6 @@ export const styledButtonPartial = `
   border-radius: var(--button-radius);
   font-family: var(--coolcats-font);
   display: block;
-  font-family: var(--coolcats-font);
   font-weight: normal;
   text-transform: uppercase;
   text-align: center;
