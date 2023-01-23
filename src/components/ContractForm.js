@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 import useDebounce from '../hooks/useDebounce';
 import useWeb3 from '../hooks/useWeb3';
 import useContract from '../hooks/useContract';
-import { styledButtonPartial, styledInputPartial } from './GlobalStyle';
+import { styledBorderPartial, styledButtonPartial, styledInputPartial } from './GlobalStyle';
 import { getTokensFromContract } from '../utils';
 import useResults, { useSetResults } from '../hooks/useResults';
 
@@ -26,23 +26,51 @@ const StyledInput = styled.input`
   width: 100%;
 `;
 
+const StyledError = styled.blockquote`
+  width: 100%;
+  background: red;
+  color: white;
+  ${styledBorderPartial};
+  margin-bottom: var(--site-spacing);
+  padding: var(--site-spacing);
+  cursor: pointer;
+`;
+
+function ContractFormError({ error }) {
+  const [closed, setClosed] = useState(false);
+
+  useEffect(() => {
+    setClosed(false);
+  }, [error])
+
+  if (closed) {
+    return null;
+  }
+
+  return (
+    <StyledError onClick={() => setClosed(true)}>
+      {error.message}
+    </StyledError>
+  )
+}
+
 function ContractForm() {
   const { library } = useWeb3();
   const { contract } = useContract();
   const { loading } = useResults();
   const { setLoading, setError: setResultsError, setResults } = useSetResults();
   const [event, setEvent] = useState();
-  const [totalSupplyEvent, setTotalSupplyEvent] = useState();
+  const [lastTokenEvent, setLastTokenEvent] = useState();
   const [contractAddress, setContractAddress] = useState('');
-  const [totalSupply, setTotalSupply] = useState(0);
+  const [lastToken, setLastToken] = useState(-1);
   const [error, setError] = useState();
-  const [totalSupplyError, setTotalSupplyError] = useState();
+  const [lastTokenError, setLastTokenError] = useState();
   const [formData, setFormData] = useState();
 
   useEffect(() => {
     if (contract && formData && !loading) {
       setLoading(true);
-      getTokensFromContract(contract, formData.contractAddress, Number(formData.totalSupply)).then((res) => {
+      getTokensFromContract(contract, formData.contractAddress, Number(formData.lastToken)).then((res) => {
         setResults(res);
       }).finally(() => {
         setFormData(undefined);
@@ -52,10 +80,14 @@ function ContractForm() {
   }, [contract, formData, loading])
 
   useEffect(() => {
-    const errs = [error, totalSupplyError].filter(e => e);
+    const errs = [error, lastTokenError].filter(e => e);
     setResultsError(errs.length > 0 ? errs : undefined);
     setResults([]);
-  }, [error, totalSupplyError]);
+  }, [error, lastTokenError]);
+
+  useEffect(() => {
+    setResults([]);
+  }, [contractAddress, lastToken]);
 
   useDebounce(
     () => {
@@ -73,26 +105,26 @@ function ContractForm() {
 
   useDebounce(
     () => {
-      if (totalSupplyEvent && totalSupplyEvent.target && totalSupplyEvent.target.value) {
+      if (lastTokenEvent && lastTokenEvent.target && lastTokenEvent.target.value) {
         try {
-          const ts = Number(totalSupplyEvent.target.value);
+          const ts = Number(lastTokenEvent.target.value);
           if (typeof ts !== 'number' || ts === NaN) {
-            throw new Error('Total supply not a number');
+            throw new Error('Last token id not a number');
           }
           if (ts < 0) {
-            throw new Error('Total supply less than zero');
+            throw new Error('Last token id less than zero');
           }
-          setTotalSupplyError(undefined);
-          setTotalSupply(ts);
+          setLastTokenError(undefined);
+          setLastToken(ts);
         } catch(e) {
-          setTotalSupplyError(e);
+          setLastTokenError(e);
         }
       } else {
-        setTotalSupply(0);
-        setTotalSupplyError(undefined);
+        setLastToken(-1);
+        setLastTokenError(undefined);
       }
     },
-    [totalSupplyEvent],
+    [lastTokenEvent],
     200
   );
 
@@ -100,28 +132,50 @@ function ContractForm() {
     setEvent(e);
   };
 
-  const onTotalSupplyChange = (e) => {
-    setTotalSupplyEvent(e);
+  const onLastTokenChange = (e) => {
+    setLastTokenEvent(e);
   };
 
   const onSubmit = (e) => {
     if (e) {
       e.preventDefault();
     }
-    const data = {};
-    (new FormData(e.target)).fd.forEach((value, key) => (data[key] = value));
+    const form = document.querySelector('form');
+    if (!form) {
+      console.error('Form not found')
+      return;
+    }
 
-    setFormData(data);
+    let fd = new FormData(form);
+    if (!fd) {
+      console.error('Form data object found')
+      return;
+    }
+
+    if (fd.fd) {
+      fd = fd.fd;
+    }
+    
+    const [contractAddress, lastToken] = fd.values(); 
+
+    setFormData({
+      contractAddress,
+      lastToken
+    });
 
     return false;
   }
 
   return (
-    <StyledForm onSubmit={onSubmit} disabled={(formData || false)}>
-      <StyledInput onChange={onInputChange} disabled={(formData || false)} name="contractAddress" placeholder="Contract Address" />
-      <StyledInput onChange={onTotalSupplyChange} disabled={(formData || false)} name="totalSupply" type="number" min={0} placeholder="Total Supply" />
-      <StyledButton disabled={!contractAddress || !totalSupply || error || totalSupplyError || (formData || false)} type="submit">Search</StyledButton>
-    </StyledForm>
+    <>
+      {error && <ContractFormError error={error} />}
+      {lastTokenError && <ContractFormError error={lastTokenError} />}
+      <StyledForm onSubmit={onSubmit} disabled={(formData || false)}>
+        <StyledInput onChange={onInputChange} disabled={(formData || false)} name="contractAddress" placeholder="Contract Address" />
+        <StyledInput onChange={onLastTokenChange} disabled={(formData || false)} name="lastToken" type="number" min={0} placeholder="Last Token Id" />
+        <StyledButton disabled={!contractAddress || (lastToken < 0) || error || lastTokenError || (formData || false)} type="submit">Search</StyledButton>
+      </StyledForm>
+    </>
   );
 }
 
