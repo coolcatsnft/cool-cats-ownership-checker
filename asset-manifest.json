@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.js": "/cool-cats-ownership-checker/static/js/main.d9cea0d1.chunk.js",
-    "main.js.map": "/cool-cats-ownership-checker/static/js/main.d9cea0d1.chunk.js.map",
+    "main.js": "/cool-cats-ownership-checker/static/js/main.fc6b6e9d.chunk.js",
+    "main.js.map": "/cool-cats-ownership-checker/static/js/main.fc6b6e9d.chunk.js.map",
     "runtime-main.js": "/cool-cats-ownership-checker/static/js/runtime-main.32ed5de4.js",
     "runtime-main.js.map": "/cool-cats-ownership-checker/static/js/runtime-main.32ed5de4.js.map",
     "static/js/2.e4051122.chunk.js": "/cool-cats-ownership-checker/static/js/2.e4051122.chunk.js",
@@ -14,6 +14,6 @@
   "entrypoints": [
     "static/js/runtime-main.32ed5de4.js",
     "static/js/2.e4051122.chunk.js",
-    "static/js/main.d9cea0d1.chunk.js"
+    "static/js/main.fc6b6e9d.chunk.js"
   ]
 }
